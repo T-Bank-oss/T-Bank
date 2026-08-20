@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Т-Банк </title>
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23ffdd00'/%3E%3Cpath d='M156 120H356V260C356 340 256 392 256 392C256 392 156 340 156 260V120Z' fill='%23ffffff'/%3E%3Cpath d='M220 185H292V220H264V295H248V220H220V185Z' fill='%231b1b1b'/%3E%3C/svg%3E">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Т-Банк">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #111;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 414px;
+            height: 896px;
+            background-color: #f4f5f7;
+            border-radius: 40px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f4f5f7;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            overflow-y: auto;
+        }
+
+        .screen.hidden {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .screen.detail-bg {
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+
+        .header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f4f5f7;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header.dark {
+            background: #1a1a1a;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff7300, #ffb700, #9c27b0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .header.dark .name {
+            color: #fff;
+        }
+
+        .gift-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #8a2be2;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 0 16px 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .search-box {
+            background-color: #e4e6eb;
+            padding: 12px 16px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #8e8e93;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .widgets-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .card-widget {
+            flex: 1;
+            background: white;
+            padding: 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+        }
+
+        .card-widget.dark {
+            background: #2c2c2e;
+            color: white;
+        }
+
+        .card-widget h3 {
+            font-size: 15px;
+            color: #8e8e93;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e4e6eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 35%;
+            height: 100%;
+            background-color: #00d2ff;
+            border-radius: 3px;
+        }
+
+        .actions-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .action-item {
+            background: white;
+            padding: 12px 8px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #111;
+            cursor: pointer;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .account-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .currency-icon {
+            width: 44px;
+            height: 44px;
+            background: #0066ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .account-title {
+            font-size: 15px;
+            color: #8e8e93;
+        }
+
+        .account-balance {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .card-badge {
+            background: #2c2c2e;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .mini-cards-preview {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .mini-card {
+            width: 45px;
+            height: 30px;
+            background: #111;
+            border-radius: 6px;
+            font-size: 9px;
+            color: #aaa;
+            padding: 3px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, #ffdd00, #ffaa00);
+            border-radius: 20px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #111;
+            cursor: pointer;
+        }
+
+        .tab-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 20px;
+            border-top: 1px solid #e4e6eb;
+            z-index: 100;
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #8e8e93;
+            cursor: pointer;
+        }
+
+        .tab-item.active {
+            color: #0066ff;
+        }
+
+        .tab-icon {
+            font-size: 20px;
+        }
+
+        .dark-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 0 16px;
+            margin-bottom: 16px;
+        }
+
+        .dark-action-btn {
+            background: #2c2c2e;
+            padding: 14px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .dark-action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #0066ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .generic-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .generic-card {
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+        }
+
+        #toast {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <div id="toast">Действие выполнено</div>
+
+        <!-- ГЛАВНЫЙ ЭКРАН -->
+        <div id="mainScreen" class="screen">
+            <div class="header">
+                <div class="profile-info">
+                    <div class="avatar">ВК</div>
+                    <div class="name">Вадим К.</div>
+                </div>
+                <button class="gift-btn" onclick="showToast('🎁 Открыты персональные подарки!')">🎁</button>
+            </div>
+
+            <div class="content">
+                <div class="search-box" onclick="showToast('🔍 Открыт поиск по банку')">🔍 Поиск</div>
+
+                <div class="widgets-row">
+                    <div class="card-widget" onclick="openDetailScreen()">
+                        <h3>Все операции</h3>
+                        <div style="font-size: 15px; color: #8e8e93;">Трат в сентябре</div>
+                        <div style="font-weight: bold; margin: 4px 0 8px;">14 253 ₽</div>
+                        <div class="progress-bar"><div class="progress-fill"></div></div>
+                    </div>
+                    <div class="card-widget" onclick="showToast('⭐ У вас 0 кэшбэка на выбор')">
+                        <h3>Кэшбэк и бонусы</h3>
+                        <div style="display: flex; gap: 6px; margin-top: 10px;">
+                            <span style="background:#ff3b30; color:white; padding:4px 8px; border-radius:8px; font-size:12px;">+</span>
+                            <span style="background:#ffcc00; padding:4px 8px; border-radius:8px; font-size:12px;">ЛТ</span>
+                            <span style="background:#ff9500; padding:4px 8px; border-radius:8px; font-size:12px;">🍔</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions-row">
+                    <div class="action-item" onclick="showToast('📞 Перевод по телефону')">
+                        <div class="action-icon">📞</div>Перевести
+                    </div>
+                    <div class="action-item" onclick="showToast('➕ Пополнение счета Black')">
+                        <div class="action-icon">➕</div>Пополнить
+                    </div>
+                    <div class="action-item" onclick="showToast('🔄 Перевод между счетами')">
+                        <div class="action-icon">🔄</div>Между счетами
+                    </div>
+                    <div class="action-item" onclick="showToast('📷️ Сканирование QR-кода')">
+                        <div class="action-icon">📷️</div>QR-код
+                    </div>
+                </div>
+
+                <div class="account-card" onclick="openDetailScreen()">
+                    <div class="account-header">
+                        <div class="account-left">
+                            <div class="currency-icon">₽</div>
+                            <div>
+                                <div class="account-title">Black</div>
+                                <div class="account-balance">3 885 788,76 ₽</div>
+                            </div>
+                        </div>
+                        <div class="card-badge">👑 0 ₽</div>
+                    </div>
+                    <div class="mini-cards-preview">
+                        <div class="mini-card">1622</div>
+                        <div class="mini-card">4545</div>
+                        <div class="mini-card">7937</div>
+                    </div>
+                </div>
+
+                <div class="promo-banner" onclick="showToast('💳 Оформление кредитной карты')">
+                    <div>
+                        <h4 style="font-size: 16px; margin-bottom: 4px;">Вам предодобрили кредитку</h4>
+                        <p style="font-size: 13px; opacity: 0.8;">Оформите за пару кликов</p>
+                    </div>
+                    <div style="font-size: 24px;">🐱</div>
+                </div>
+            </div>
+
+            <div class="tab-bar">
+                <div class="tab-item active" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
+
+        <!-- ДЕТАЛИ СЧЕТА -->
+        <div id="detailScreen" class="screen detail-bg hidden">
+            <div class="header dark">
+                <button class="back-btn" onclick="closeDetailScreen()">←</button>
+                <div style="width: 40px;"></div>
+            </div>
+
+            <div style="padding: 0 20px 16px;">
+                <div style="font-size: 16px; color: #aaa;">Black ✎</div>
+                <div style="font-size: 32px; font-weight: bold; margin-top: 4px;">3 885 788,76 ₽</div>
+            </div>
+
+            <div class="dark-actions">
+                <div class="dark-action-btn" onclick="showToast('🎯 Оплата услуг')">
+                    <div class="dark-action-icon">🎯</div>Оплатить
+                </div>
+                <div class="dark-action-btn" onclick="showToast('➕ Пополнение счета')">
+                    <div class="dark-action-icon">➕</div>Пополнить
+                </div>
+                <div class="dark-action-btn" onclick="showToast('↗ Перевод средств')">
+                    <div class="dark-action-icon">↗</div>Перевести
+                </div>
+            </div>
+
+            <div class="content" style="background: #1a1a1a;">
+                <div style="display: flex; gap: 12px;">
+                    <div class="card-widget dark" style="flex:1;" onclick="showToast('📊 История операций')">
+                        <h3 style="color: #aaa;">Операции</h3>
+                        <div style="font-size: 14px; margin-top: 4px;">Трат в сентябре</div>
+                        <div style="font-weight: bold; font-size: 16px; margin: 4px 0 8px;">14 253 ₽</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-bar" style="background: rgba(26, 26, 26, 0.9); border-top: 1px solid #333;">
+                <div class="tab-item" style="color: #666;" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" style="color: #666;" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" style="color: #666;" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" style="color: #666;" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" style="color: #666;" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
+
+        <!-- ПЛАТЕЖИ -->
+        <div id="paymentsScreen" class="screen hidden">
+            <div class="header"><div class="name" style="font-size: 20px;">Платежи</div></div>
+            <div class="content">
+                <div class="search-box" onclick="showToast('🔍 Поиск платежей')">🔍 Поиск платежей</div>
+                <div class="generic-list">
+                    <div class="generic-card" onclick="showToast('📱 Оплата связи')">📱 Мобильная связь</div>
+                    <div class="generic-card" onclick="showToast('💡 ЖКХ')">💡 Электричество и ЖКХ</div>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item active" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
+
+        <!-- ГОРОД -->
+        <div id="cityScreen" class="screen hidden">
+            <div class="header"><div class="name" style="font-size: 20px;">Город</div></div>
+            <div class="content">
+                <div class="generic-list">
+                    <div class="generic-card" onclick="showToast('🎟️ Кино')">🎟️ Кино</div>
+                    <div class="generic-card" onclick="showToast('☕ Рестораны')">☕ Рестораны и кафе</div>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item active" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
+
+        <!-- ЧАТ -->
+        <div id="chatScreen" class="screen hidden">
+            <div class="header"><div class="name" style="font-size: 20px;">Чат</div></div>
+            <div class="content">
+                <div style="background: white; padding: 16px; border-radius: 16px; margin-top: 16px;">
+                    <p style="font-size: 14px;">Здравствуйте, Вадим! Чем помочь?</p>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item active" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
+
+        <!-- ВИТРИНА -->
+        <div id="vitrinaScreen" class="screen hidden">
+            <div class="header"><div class="name" style="font-size: 20px;">Витрина</div></div>
+            <div class="content">
+                <div class="generic-list">
+                    <div class="generic-card" onclick="showToast('💰 Вклады')">💰 Вклады и счета</div>
+                    <div class="generic-card" onclick="showToast('📈 Инвестиции')">📈 Инвестиции</div>
+                </div>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item active" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openDetailScreen() { hideAllScreens(); document.getElementById('detailScreen').classList.remove('hidden'); }
+        function closeDetailScreen() { switchTab('main'); }
+        function hideAllScreens() {
+            ['mainScreen', 'detailScreen', 'paymentsScreen', 'cityScreen', 'chatScreen', 'vitrinaScreen'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+        }
+        function switchTab(name) {
+            hideAllScreens();
+            document.getElementById(name + 'Screen').classList.remove('hidden');
+        }
+        function showToast(text) {
+            const t = document.getElementById('toast');
+            t.innerText = text;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+    </script>
+</body>
+</html>
