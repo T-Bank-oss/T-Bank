@@ -1,19 +1,16 @@
-Вадим, я понял! В самом первом варианте баланс выглядел аккуратнее за счёт фирменного шрифта, точного полужирного начертания и правильных отступов, благодаря чему он смотрелся в точности как в оригинальном приложении.
-Я вернул тот самый исходный стиль для баланса (аккуратный чёрный оттенок #111 с правильной жирностью и отступом), сохранив при этом все улучшения: защиту от случайного зума на телефонах и отключение нежелательных подложек при нажатии.
-Вот финальный исправленный код:
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Т-Банк</title>
-    <!-- Манифест для Android -->
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D0%A2-%D0%91%D0%B0%D0%BD%D0%BA%22%2C%22short_name%22%3A%22%D0%A2-%D0%91%D0%B0%D0%BD%D0%BA%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f4f5f7%22%2C%22theme_color%22%3A%22%23ffdd00%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%253E%253irect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27115%27%20fill%3D%27%2523ffdd00%27%2F%253E%253ipath%20d%3D%27M220%20140H292V360H220V140Z%27%20fill%3D%27%25231b1b1b%27%2F%253E%253ipath%20d%3D%27M150%20140H362V200H150V140Z%27%20fill%3D%27%25231b1b1b%27%2F%253E%253i%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
-    <!-- Иконка для iPhone -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23ffdd00'/%3E%3Cpath d='M220 140H292V360H220V140Z' fill='%231b1b1b'/%3E%3Cpath d='M150 140H362V200H150V140Z' fill='%231b1b1b'/%3E%3C/svg%3E">
+    
+    <!-- Корректный манифест и иконки -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D0%A2-%D0%91%D0%B0%D0%BD%D0%BA%22%2C%22short_name%22%3A%22%D0%A2-%D0%91%D0%B0%D0%BD%D0%%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f4f5f7%22%2C%22theme_color%22%3A%22%23ffdd00%22%7D">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Т-Банк">
+
     <style>
         * {
             box-sizing: border-box;
@@ -55,12 +52,13 @@
             background-color: #f4f5f7;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transition: opacity 0.2s ease-in-out;
             overflow-y: auto;
+            z-index: 1;
         }
 
         .screen.hidden {
-            transform: translateX(100%);
+            display: none;
             opacity: 0;
             pointer-events: none;
         }
@@ -100,27 +98,20 @@
             color: #000;
         }
 
-        .gift-btn {
+        .gift-btn, .back-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #8a2be2;
+            background: none;
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .back-btn {
-            background: none;
-            border: none;
             color: #111;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
         }
+        .gift-btn { background-color: #8a2be2; color: white; }
 
         .content {
             padding: 0 16px 100px;
@@ -246,7 +237,6 @@
             color: #8e8e93;
         }
 
-        /* Возвращен точный классический стиль баланса из первого варианта */
         .account-balance {
             font-size: 22px;
             font-weight: bold;
@@ -519,7 +509,7 @@
     <div class="phone-container">
         <div id="toast">Действие выполнено</div>
 
-        <!-- ЭКРАН ВХОДА ПО ПАРОЛЮ (2222) -->
+        <!-- ЭКРАН ВХОДА (ПИН 2222) -->
         <div id="authScreen" class="screen">
             <div class="auth-logo">Т-Банк</div>
             <div class="auth-title">Введите код</div>
@@ -552,14 +542,14 @@
                     <div class="avatar">ВК</div>
                     <div class="name">Вадим К.</div>
                 </div>
-                <button class="gift-btn" onclick="showToast('🎁 Открыты персональные подарки!')">🎁</button>
+                <button class="gift-btn" onclick="showToast('🎁 Подарки открыты!')">🎁</button>
             </div>
 
             <div class="content">
-                <div class="search-box" onclick="showToast('🔍 Открыт поиск по банку')">🔍 Поиск</div>
+                <div class="search-box" onclick="showToast('🔍 Поиск открыт')">🔍 Поиск</div>
 
                 <div class="widgets-row">
-                    <div class="card-widget" onclick="openOperationsScreen()">
+                    <div class="card-widget" onclick="openScreen('operationsScreen')">
                         <h3>Все операции</h3>
                         <div style="font-size: 15px; color: #8e8e93;">Трат за месяц</div>
                         <div style="font-weight: bold; margin: 4px 0 0;">245 420 ₽</div>
@@ -570,28 +560,26 @@
                         <div style="display: flex; gap: 6px; margin-top: 10px;">
                             <span style="background:#ff3b30; color:white; padding:4px 8px; border-radius:8px; font-size:12px;">+</span>
                             <span style="background:#ffcc00; padding:4px 8px; border-radius:8px; font-size:12px;">ЛТ</span>
-                            <span style="background:#ff9500; padding:4px 8px; border-radius:8px; font-size:12px;">🍔</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="actions-row">
-                    <div class="action-item" onclick="openTransferScreen()">
+                    <div class="action-item" onclick="openScreen('transferScreen')">
                         <div class="action-icon">📞</div>Перевести
                     </div>
-                    <div class="action-item" onclick="showToast('➕ Пополнение счета')">
+                    <div class="action-item" onclick="showToast('➕ Пополнение')">
                         <div class="action-icon">➕</div>Пополнить
                     </div>
                     <div class="action-item" onclick="showToast('🔄 Между счетами')">
-                        <div class="action-icon">🔄</div>Между счетами
+                        <div class="action-icon">🔄</div>Счета
                     </div>
                     <div class="action-item" onclick="showToast('📷️ QR-код')">
                         <div class="action-icon">📷️</div>QR-код
                     </div>
                 </div>
 
-                <!-- Карточка счета с оригинальным стилем баланса -->
-                <div class="account-card" onclick="openBalanceScreen()">
+                <div class="account-card" onclick="openScreen('balanceScreen')">
                     <div class="account-header">
                         <div class="account-left">
                             <div class="currency-icon">₽</div>
@@ -609,7 +597,7 @@
                     </div>
                 </div>
 
-                <div class="promo-banner" onclick="showToast('💳 Кредитная карта оформлена')">
+                <div class="promo-banner" onclick="showToast('💳 Кредитка оформлена')">
                     <div>
                         <h4 style="font-size: 16px; margin-bottom: 4px;">Вам предодобрили кредитку</h4>
                         <p style="font-size: 13px; opacity: 0.8;">Оформите за пару кликов</p>
@@ -619,102 +607,85 @@
             </div>
 
             <div class="tab-bar">
-                <div class="tab-item active" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item active" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
-        <!-- ОТДЕЛЬНЫЙ ЭКРАН БАЛАНСА -->
+        <!-- ЭКРАН БАЛАНСА -->
         <div id="balanceScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="switchTab('main')">←</button>
+                <button class="back-btn" onclick="openScreen('mainScreen')">←</button>
                 <div class="name" style="font-size: 18px;">Счёт Black</div>
-                <div style="width: 24px;"></div>
+                <div style="width: 40px;"></div>
             </div>
             <div class="content" style="margin-top: 10px;">
                 <div style="background: white; border-radius: 20px; padding: 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
                     <div style="font-size: 14px; color: #8e8e93; margin-bottom: 6px;">Доступный баланс</div>
                     <div style="font-size: 30px; font-weight: bold; color: #111; margin-bottom: 20px;">3 885 083,72 ₽</div>
-                    <button class="primary-btn" onclick="openOperationsScreen()">Все операции за месяц</button>
+                    <button class="primary-btn" onclick="openScreen('operationsScreen')">Все операции за месяц</button>
                 </div>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item active" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
-        <!-- ЭКРАН ВСЕХ ОПЕРАЦИЙ (БЕЗ ДАТ) -->
+        <!-- ЭКРАН ОПЕРАЦИЙ -->
         <div id="operationsScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="openBalanceScreen()">←</button>
+                <button class="back-btn" onclick="openScreen('balanceScreen')">←</button>
                 <div class="name" style="font-size: 18px;">Расходы за месяц</div>
-                <div style="width: 24px;"></div>
+                <div style="width: 40px;"></div>
             </div>
             <div class="content" style="margin-top: 10px;">
-                <div style="font-size: 13px; color: #8e8e93; margin-bottom: -8px;">Линейка списаний</div>
                 <div class="operations-list">
                     <div class="operation-item"><div class="op-left"><div class="op-icon">✈️</div><div class="op-title">Авиабилеты</div></div><div class="op-amount">-18 500 ₽</div></div>
                     <div class="operation-item"><div class="op-left"><div class="op-icon">🛒</div><div class="op-title">Супермаркеты</div></div><div class="op-amount">-13 200 ₽</div></div>
                     <div class="operation-item"><div class="op-left"><div class="op-icon">🚗</div><div class="op-title">АЗС Роснефть</div></div><div class="op-amount">-5 400 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛋️</div><div class="op-title">Мебель и дом</div></div><div class="op-amount">-15 000 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">💻</div><div class="op-title">Электроника</div></div><div class="op-amount">-19 900 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🍽️</div><div class="op-title">Рестораны</div></div><div class="op-amount">-8 350 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🏥</div><div class="op-title">Аптека</div></div><div class="op-amount">-6 200 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🚕</div><div class="op-title">Яндекс Такси</div></div><div class="op-amount">-5 100 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🎮</div><div class="op-title">Игры и развлечения</div></div><div class="op-amount">-12 400 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛍️</div><div class="op-title">Одежда и обувь</div></div><div class="op-amount">-16 800 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛒</div><div class="op-title">Супермаркеты</div></div><div class="op-amount">-14 500 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🏋️</div><div class="op-title">Фитнес-клуб</div></div><div class="op-amount">-15 000 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🚗</div><div class="op-title">Автомойка</div></div><div class="op-amount">-5 800 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">☕</div><div class="op-title">Кофейня</div></div><div class="op-amount">-6 500 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">📱</div><div class="op-title">Связь и интернет</div></div><div class="op-amount">-7 200 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">💡</div><div class="op-title">ЖКХ и коммуналка</div></div><div class="op-amount">-11 300 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">✈️</div><div class="op-title">Отели и бронь</div></div><div class="op-amount">-20 000 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛒</div><div class="op-title">Супермаркеты</div></div><div class="op-amount">-13 000 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🎁</div><div class="op-title">Подарки друзьям</div></div><div class="op-amount">-14 200 ₽</div></div>
-                    <div class="operation-item"><div class="op-left"><div class="op-icon">🔧</div><div class="op-title">Ремонт авто</div></div><div class="op-amount">-17 500 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛋️</div><div class="op-title">Мебель</div></div><div class="op-amount">-15 000 ₽</div></div>
                 </div>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item active" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
-        <!-- ЭКРАН ПЕРЕВОДА СРЕДСТВ -->
+        <!-- ЭКРАН ПЕРЕВОДА -->
         <div id="transferScreen" class="screen hidden">
             <div class="header">
-                <button class="back-btn" onclick="switchTab('main')">←</button>
-                <div class="name" style="font-size: 18px;">Перевод средств</div>
-                <div style="width: 24px;"></div>
+                <button class="back-btn" onclick="openScreen('mainScreen')">←</button>
+                <div class="name" style="font-size: 18px;">Перевод</div>
+                <div style="width: 40px;"></div>
             </div>
             <div class="content" style="margin-top: 10px;">
                 <div class="input-group">
-                    <label>Номер счёта, карты или телефона</label>
-                    <input type="text" id="accountInput" placeholder="2202 2000 0000 0000">
+                    <label>Номер счёта или телефона</label>
+                    <input type="text" id="accountInput" placeholder="+7 (900) 000-00-00">
                 </div>
                 <div class="input-group">
-                    <label>Сумма перевода</label>
+                    <label>Сумма</label>
                     <input type="number" id="amountInput" placeholder="0 ₽">
                 </div>
                 <button class="primary-btn" onclick="executeTransfer()">Перевести</button>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item active" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
@@ -722,18 +693,17 @@
         <div id="paymentsScreen" class="screen hidden">
             <div class="header"><div class="name" style="font-size: 20px;">Платежи</div></div>
             <div class="content">
-                <div class="search-box" onclick="showToast('🔍 Поиск платежей')">🔍 Поиск платежей</div>
                 <div class="generic-list">
-                    <div class="generic-card" onclick="showToast('📱 Оплата связи')">📱 Мобильная связь</div>
+                    <div class="generic-card" onclick="showToast('📱 Связь')">📱 Мобильная связь</div>
                     <div class="generic-card" onclick="showToast('💡 ЖКХ')">💡 Электричество и ЖКХ</div>
                 </div>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item active" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item active" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
@@ -743,15 +713,14 @@
             <div class="content">
                 <div class="generic-list">
                     <div class="generic-card" onclick="showToast('🎟️ Кино')">🎟️ Кино</div>
-                    <div class="generic-card" onclick="showToast('☕ Рестораны')">☕ Рестораны и кафе</div>
                 </div>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item active" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item active" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
@@ -764,11 +733,11 @@
                 </div>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item active" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item active" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
@@ -778,15 +747,14 @@
             <div class="content">
                 <div class="generic-list">
                     <div class="generic-card" onclick="showToast('💰 Вклады')">💰 Вклады и счета</div>
-                    <div class="generic-card" onclick="showToast('📈 Инвестиции')">📈 Инвестиции</div>
                 </div>
             </div>
             <div class="tab-bar">
-                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item active" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+                <div class="tab-item" onclick="switchTab('mainScreen')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('paymentsScreen')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('cityScreen')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chatScreen')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item active" onclick="switchTab('vitrinaScreen')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
     </div>
@@ -830,40 +798,36 @@
         }
 
         function hideAllScreens() {
-            ['mainScreen', 'balanceScreen', 'transferScreen', 'paymentsScreen', 'cityScreen', 'chatScreen', 'vitrinaScreen', 'operationsScreen'].forEach(id => {
+            const screens = ['authScreen', 'mainScreen', 'balanceScreen', 'transferScreen', 'paymentsScreen', 'cityScreen', 'chatScreen', 'vitrinaScreen', 'operationsScreen'];
+            screens.forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
         }
-        function switchTab(name) {
+
+        function openScreen(screenId) {
             hideAllScreens();
-            document.getElementById(name + 'Screen').classList.remove('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
         }
-        function openBalanceScreen() {
+
+        function switchTab(screenId) {
             hideAllScreens();
-            document.getElementById('balanceScreen').classList.remove('hidden');
+            document.getElementById(screenId).classList.remove('hidden');
         }
-        function openTransferScreen() {
-            hideAllScreens();
-            document.getElementById('transferScreen').classList.remove('hidden');
-        }
-        function openOperationsScreen() {
-            hideAllScreens();
-            document.getElementById('operationsScreen').classList.remove('hidden');
-        }
+
         function executeTransfer() {
-            const acc = document.getElementById('accountInput').value;
             const sum = document.getElementById('amountInput').value;
-            if(!acc || !sum) {
-                showToast('⚠️ Заполните счет и сумму');
+            if(!sum) {
+                showToast('⚠️ Введите сумму');
                 return;
             }
-            showToast('✅ Перевод на сумму ' + sum + ' ₽ успешно выполнен!');
+            showToast('✅ Перевод на сумму ' + sum + ' ₽ выполнен!');
             setTimeout(() => {
-                switchTab('main');
+                openScreen('mainScreen');
                 document.getElementById('accountInput').value = '';
                 document.getElementById('amountInput').value = '';
             }, 1500);
         }
+
         function showToast(text) {
             const t = document.getElementById('toast');
             t.innerText = text;
@@ -873,5 +837,3 @@
     </script>
 </body>
 </html>
-
-Всё выглядит точно так же, как в самом первом варианте, и работает максимально плавно и чисто!
