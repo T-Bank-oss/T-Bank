@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Т-Банк Прототип</title>
-    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExNSIgZmlsbD0iI2ZmZGQwMCIvPgogIDxwYXRoIGQ9Ik0xNTYgMTIwSDM1NlYyNjBDMzU2IDM0MCAyNTYgMzkyIDI1NiAzOTJDMjU2IDM5MiAxNTYgMzQwIDE1NiAyNjBWMTIwWiIgZmlsbD0iI2ZmZmZmZiIvPgogIDxwYXRoIGQ9Ik0yMjAgMTg1SDI5MlYyMjBIMjY0VjI5NUgyNDhWMjIwSDIyMFYxODVaIiBmaWxsPSIjMWIxYjFiIi8+Cjwvc3ZnPg==">
+    <title>Т-Банк</title>
+    <!-- Манифест для Android -->
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22%D0%A2-%D0%91%D0%B0%D0%BD%D0%BA%22%2C%22short_name%22%3A%22%D0%A2-%D0%91%D0%B0%D0%BD%D0%BA%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f4f5f7%22%2C%22theme_color%22%3A%22%23ffdd00%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20512%20512%27%253E%253irect%20width%3D%27512%27%20height%3D%27512%27%20rx%3D%27115%27%20fill%3D%27%2523ffdd00%27%2F%253E%253ipath%20d%3D%27M220%20140H292V360H220V140Z%27%20fill%3D%27%25231b1b1b%27%2F%253E%253ipath%20d%3D%27M150%20140H362V200H150V140Z%27%20fill%3D%27%25231b1b1b%27%2F%253E%253i%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+    <!-- Иконка для iPhone (Apple Touch Icon) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23ffdd00'/%3E%3Cpath d='M220 140H292V360H220V140Z' fill='%231b1b1b'/%3E%3Cpath d='M150 140H362V200H150V140Z' fill='%231b1b1b'/%3E%3C/svg%3E">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Т-Банк">
@@ -57,11 +60,6 @@
             pointer-events: none;
         }
 
-        .screen.detail-bg {
-            background-color: #1a1a1a;
-            color: #fff;
-        }
-
         .header {
             padding: 16px 20px;
             display: flex;
@@ -71,10 +69,6 @@
             position: sticky;
             top: 0;
             z-index: 10;
-        }
-
-        .header.dark {
-            background: #1a1a1a;
         }
 
         .profile-info {
@@ -101,10 +95,6 @@
             color: #000;
         }
 
-        .header.dark .name {
-            color: #fff;
-        }
-
         .gift-btn {
             width: 40px;
             height: 40px;
@@ -122,7 +112,7 @@
         .back-btn {
             background: none;
             border: none;
-            color: white;
+            color: #111;
             font-size: 24px;
             cursor: pointer;
         }
@@ -160,11 +150,6 @@
             cursor: pointer;
         }
 
-        .card-widget.dark {
-            background: #2c2c2e;
-            color: white;
-        }
-
         .card-widget h3 {
             font-size: 15px;
             color: #8e8e93;
@@ -177,10 +162,11 @@
             background-color: #e4e6eb;
             border-radius: 3px;
             overflow: hidden;
+            margin-top: 8px;
         }
 
         .progress-fill {
-            width: 35%;
+            width: 65%;
             height: 100%;
             background-color: #00d2ff;
             border-radius: 3px;
@@ -259,6 +245,7 @@
             font-size: 22px;
             font-weight: bold;
             margin-top: 2px;
+            color: #111; /* Чёрный цвет баланса для iPhone и Android */
         }
 
         .card-badge {
@@ -299,6 +286,164 @@
             cursor: pointer;
         }
 
+        .input-group {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .input-group label {
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        .input-group input {
+            border: none;
+            outline: none;
+            font-size: 18px;
+            font-weight: 500;
+            color: #111;
+            background: transparent;
+            width: 100%;
+        }
+
+        .primary-btn {
+            background: #ffdd00;
+            color: #111;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 221, 0, 0.3);
+        }
+
+        /* Список операций без дат */
+        .operations-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .operation-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .op-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .op-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .op-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #111;
+        }
+
+        .op-amount {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ff3b30;
+        }
+
+        /* Экран входа по паролю (2222) */
+        #authScreen {
+            background-color: #ffdd00;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .auth-logo {
+            font-size: 48px;
+            font-weight: 900;
+            color: #111;
+            margin-bottom: 8px;
+            letter-spacing: -2px;
+        }
+
+        .auth-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 30px;
+        }
+
+        .pin-dots {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .pin-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #111;
+            background: transparent;
+            transition: background 0.2s;
+        }
+
+        .pin-dot.filled {
+            background: #111;
+        }
+
+        .pin-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 75px);
+            gap: 16px;
+        }
+
+        .pin-key {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            border: none;
+            font-size: 24px;
+            font-weight: 600;
+            color: #111;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .pin-key:active {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
         .tab-bar {
             position: absolute;
             bottom: 0;
@@ -331,37 +476,6 @@
 
         .tab-icon {
             font-size: 20px;
-        }
-
-        .dark-actions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding: 0 16px;
-            margin-bottom: 16px;
-        }
-
-        .dark-action-btn {
-            background: #2c2c2e;
-            padding: 14px;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .dark-action-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #0066ff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .generic-list {
@@ -400,19 +514,40 @@
             transform: translateX(-50%) translateY(0);
         }
     </style>
-</head> 
-    <link rel="apple-touch-icon" href="icon-512.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Т-Банк">
-
+</head>
 <body>
 
     <div class="phone-container">
         <div id="toast">Действие выполнено</div>
 
+        <!-- ЭКРАН ВХОДА ПО ПАРОЛЮ (2222) -->
+        <div id="authScreen" class="screen">
+            <div class="auth-logo">Т-Банк</div>
+            <div class="auth-title">Введите код</div>
+            <div class="pin-dots">
+                <div class="pin-dot" id="dot1"></div>
+                <div class="pin-dot" id="dot2"></div>
+                <div class="pin-dot" id="dot3"></div>
+                <div class="pin-dot" id="dot4"></div>
+            </div>
+            <div class="pin-pad">
+                <button class="pin-key" onclick="pressPin('1')">1</button>
+                <button class="pin-key" onclick="pressPin('2')">2</button>
+                <button class="pin-key" onclick="pressPin('3')">3</button>
+                <button class="pin-key" onclick="pressPin('4')">4</button>
+                <button class="pin-key" onclick="pressPin('5')">5</button>
+                <button class="pin-key" onclick="pressPin('6')">6</button>
+                <button class="pin-key" onclick="pressPin('7')">7</button>
+                <button class="pin-key" onclick="pressPin('8')">8</button>
+                <button class="pin-key" onclick="pressPin('9')">9</button>
+                <div></div>
+                <button class="pin-key" onclick="pressPin('0')">0</button>
+                <button class="pin-key" onclick="clearPin()" style="font-size: 16px;">⌫</button>
+            </div>
+        </div>
+
         <!-- ГЛАВНЫЙ ЭКРАН -->
-        <div id="mainScreen" class="screen">
+        <div id="mainScreen" class="screen hidden">
             <div class="header">
                 <div class="profile-info">
                     <div class="avatar">ВК</div>
@@ -425,13 +560,13 @@
                 <div class="search-box" onclick="showToast('🔍 Открыт поиск по банку')">🔍 Поиск</div>
 
                 <div class="widgets-row">
-                    <div class="card-widget" onclick="openDetailScreen()">
+                    <div class="card-widget" onclick="openOperationsScreen()">
                         <h3>Все операции</h3>
-                        <div style="font-size: 15px; color: #8e8e93;">Трат в сентябре</div>
-                        <div style="font-weight: bold; margin: 4px 0 8px;">14 253 ₽</div>
+                        <div style="font-size: 15px; color: #8e8e93;">Трат за месяц</div>
+                        <div style="font-weight: bold; margin: 4px 0 0;">245 420 ₽</div>
                         <div class="progress-bar"><div class="progress-fill"></div></div>
                     </div>
-                    <div class="card-widget" onclick="showToast('⭐ У вас 0 кэшбэка на выбор')">
+                    <div class="card-widget" onclick="showToast('⭐ Кэшбэк и бонусы')">
                         <h3>Кэшбэк и бонусы</h3>
                         <div style="display: flex; gap: 6px; margin-top: 10px;">
                             <span style="background:#ff3b30; color:white; padding:4px 8px; border-radius:8px; font-size:12px;">+</span>
@@ -442,21 +577,22 @@
                 </div>
 
                 <div class="actions-row">
-                    <div class="action-item" onclick="showToast('📞 Перевод по телефону')">
+                    <div class="action-item" onclick="openTransferScreen()">
                         <div class="action-icon">📞</div>Перевести
                     </div>
-                    <div class="action-item" onclick="showToast('➕ Пополнение счета Black')">
+                    <div class="action-item" onclick="showToast('➕ Пополнение счета')">
                         <div class="action-icon">➕</div>Пополнить
                     </div>
-                    <div class="action-item" onclick="showToast('🔄 Перевод между счетами')">
+                    <div class="action-item" onclick="showToast('🔄 Между счетами')">
                         <div class="action-icon">🔄</div>Между счетами
                     </div>
-                    <div class="action-item" onclick="showToast('📷️ Сканирование QR-кода')">
+                    <div class="action-item" onclick="showToast('📷️ QR-код')">
                         <div class="action-icon">📷️</div>QR-код
                     </div>
                 </div>
 
-                <div class="account-card" onclick="openDetailScreen()">
+                <!-- Карточка счета с черным балансом -->
+                <div class="account-card" onclick="openBalanceScreen()">
                     <div class="account-header">
                         <div class="account-left">
                             <div class="currency-icon">₽</div>
@@ -474,7 +610,7 @@
                     </div>
                 </div>
 
-                <div class="promo-banner" onclick="showToast('💳 Оформление кредитной карты')">
+                <div class="promo-banner" onclick="showToast('💳 Кредитная карта оформлена')">
                     <div>
                         <h4 style="font-size: 16px; margin-bottom: 4px;">Вам предодобрили кредитку</h4>
                         <p style="font-size: 13px; opacity: 0.8;">Оформите за пару кликов</p>
@@ -492,46 +628,94 @@
             </div>
         </div>
 
-        <!-- ДЕТАЛИ СЧЕТА -->
-        <div id="detailScreen" class="screen detail-bg hidden">
-            <div class="header dark">
-                <button class="back-btn" onclick="closeDetailScreen()">←</button>
-                <div style="width: 40px;"></div>
+        <!-- ОТДЕЛЬНЫЙ ЭКРАН БАЛАНСА -->
+        <div id="balanceScreen" class="screen hidden">
+            <div class="header">
+                <button class="back-btn" onclick="switchTab('main')">←</button>
+                <div class="name" style="font-size: 18px;">Счёт Black</div>
+                <div style="width: 24px;"></div>
             </div>
-
-            <div style="padding: 0 20px 16px;">
-                <div style="font-size: 16px; color: #aaa;">Black ✎</div>
-                <div style="font-size: 32px; font-weight: bold; margin-top: 4px;">3 885 083,73 ₽</div>
-            </div>
-
-            <div class="dark-actions">
-                <div class="dark-action-btn" onclick="showToast('🎯 Оплата услуг')">
-                    <div class="dark-action-icon">🎯</div>Оплатить
-                </div>
-                <div class="dark-action-btn" onclick="showToast('➕ Пополнение счета')">
-                    <div class="dark-action-icon">➕</div>Пополнить
-                </div>
-                <div class="dark-action-btn" onclick="showToast('↗ Перевод средств')">
-                    <div class="dark-action-icon">↗</div>Перевести
+            <div class="content" style="margin-top: 10px;">
+                <div style="background: white; border-radius: 20px; padding: 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                    <div style="font-size: 14px; color: #8e8e93; margin-bottom: 6px;">Доступный баланс</div>
+                    <div style="font-size: 30px; font-weight: bold; color: #111; margin-bottom: 20px;">3 885 083,72 ₽</div>
+                    <button class="primary-btn" onclick="openOperationsScreen()">Все операции за месяц</button>
                 </div>
             </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
 
-            <div class="content" style="background: #1a1a1a;">
-                <div style="display: flex; gap: 12px;">
-                    <div class="card-widget dark" style="flex:1;" onclick="showToast('📊 История операций')">
-                        <h3 style="color: #aaa;">Операции</h3>
-                        <div style="font-size: 14px; margin-top: 4px;">Трат в сентябре</div>
-                        <div style="font-weight: bold; font-size: 16px; margin: 4px 0 8px;">14 253 ₽</div>
-                    </div>
+        <!-- ЭКРАН ВСЕХ ОПЕРАЦИЙ (БЕЗ ДАТ) -->
+        <div id="operationsScreen" class="screen hidden">
+            <div class="header">
+                <button class="back-btn" onclick="openBalanceScreen()">←</button>
+                <div class="name" style="font-size: 18px;">Расходы за месяц</div>
+                <div style="width: 24px;"></div>
+            </div>
+            <div class="content" style="margin-top: 10px;">
+                <div style="font-size: 13px; color: #8e8e93; margin-bottom: -8px;">Линейка списаний</div>
+                <div class="operations-list">
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">✈️</div><div class="op-title">Авиабилеты</div></div><div class="op-amount">-18 500 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛒</div><div class="op-title">Супермаркеты</div></div><div class="op-amount">-13 200 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🚗</div><div class="op-title">АЗС Роснефть</div></div><div class="op-amount">-5 400 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛋️</div><div class="op-title">Мебель и дом</div></div><div class="op-amount">-15 000 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">💻</div><div class="op-title">Электроника</div></div><div class="op-amount">-19 900 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🍽️</div><div class="op-title">Рестораны</div></div><div class="op-amount">-8 350 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🏥</div><div class="op-title">Аптека</div></div><div class="op-amount">-6 200 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🚕</div><div class="op-title">Яндекс Такси</div></div><div class="op-amount">-5 100 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🎮</div><div class="op-title">Игры и развлечения</div></div><div class="op-amount">-12 400 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛍️</div><div class="op-title">Одежда и обувь</div></div><div class="op-amount">-16 800 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛒</div><div class="op-title">Супермаркеты</div></div><div class="op-amount">-14 500 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🏋️</div><div class="op-title">Фитнес-клуб</div></div><div class="op-amount">-15 000 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🚗</div><div class="op-title">Автомойка</div></div><div class="op-amount">-5 800 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">☕</div><div class="op-title">Кофейня</div></div><div class="op-amount">-6 500 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">📱</div><div class="op-title">Связь и интернет</div></div><div class="op-amount">-7 200 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">💡</div><div class="op-title">ЖКХ и коммуналка</div></div><div class="op-amount">-11 300 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">✈️</div><div class="op-title">Отели и бронь</div></div><div class="op-amount">-20 000 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🛒</div><div class="op-title">Супермаркеты</div></div><div class="op-amount">-13 000 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🎁</div><div class="op-title">Подарки друзьям</div></div><div class="op-amount">-14 200 ₽</div></div>
+                    <div class="operation-item"><div class="op-left"><div class="op-icon">🔧</div><div class="op-title">Ремонт авто</div></div><div class="op-amount">-17 500 ₽</div></div>
                 </div>
             </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+            </div>
+        </div>
 
-            <div class="tab-bar" style="background: rgba(26, 26, 26, 0.9); border-top: 1px solid #333;">
-                <div class="tab-item" style="color: #666;" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
-                <div class="tab-item" style="color: #666;" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
-                <div class="tab-item" style="color: #666;" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
-                <div class="tab-item" style="color: #666;" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
-                <div class="tab-item" style="color: #666;" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
+        <!-- ЭКРАН ПЕРЕВОДА СРЕДСТВ -->
+        <div id="transferScreen" class="screen hidden">
+            <div class="header">
+                <button class="back-btn" onclick="switchTab('main')">←</button>
+                <div class="name" style="font-size: 18px;">Перевод средств</div>
+                <div style="width: 24px;"></div>
+            </div>
+            <div class="content" style="margin-top: 10px;">
+                <div class="input-group">
+                    <label>Номер счёта, карты или телефона</label>
+                    <input type="text" id="accountInput" placeholder="2202 2000 0000 0000">
+                </div>
+                <div class="input-group">
+                    <label>Сумма перевода</label>
+                    <input type="number" id="amountInput" placeholder="0 ₽">
+                </div>
+                <button class="primary-btn" onclick="executeTransfer()">Перевести</button>
+            </div>
+            <div class="tab-bar">
+                <div class="tab-item" onclick="switchTab('main')"><span class="tab-icon">🏠</span>Главная</div>
+                <div class="tab-item" onclick="switchTab('payments')"><span class="tab-icon">💳</span>Платежи</div>
+                <div class="tab-item" onclick="switchTab('city')"><span class="tab-icon">🏙️</span>Город</div>
+                <div class="tab-item" onclick="switchTab('chat')"><span class="tab-icon">💬</span>Чат</div>
+                <div class="tab-item" onclick="switchTab('vitrina')"><span class="tab-icon">🛍️</span>Витрина</div>
             </div>
         </div>
 
@@ -609,16 +793,77 @@
     </div>
 
     <script>
-        function openDetailScreen() { hideAllScreens(); document.getElementById('detailScreen').classList.remove('hidden'); }
-        function closeDetailScreen() { switchTab('main'); }
+        let currentPin = '';
+        const correctPin = '2222';
+
+        function pressPin(num) {
+            if(currentPin.length < 4) {
+                currentPin += num;
+                updateDots();
+                if(currentPin.length === 4) {
+                    if(currentPin === correctPin) {
+                        setTimeout(() => {
+                            document.getElementById('authScreen').classList.add('hidden');
+                            document.getElementById('mainScreen').classList.remove('hidden');
+                        }, 200);
+                    } else {
+                        showToast('❌ Неверный код');
+                        setTimeout(() => { clearPin(); }, 400);
+                    }
+                }
+            }
+        }
+
+        function clearPin() {
+            currentPin = '';
+            updateDots();
+        }
+
+        function updateDots() {
+            for(let i = 1; i <= 4; i++) {
+                const dot = document.getElementById('dot' + i);
+                if(i <= currentPin.length) {
+                    dot.classList.add('filled');
+                } else {
+                    dot.classList.remove('filled');
+                }
+            }
+        }
+
         function hideAllScreens() {
-            ['mainScreen', 'detailScreen', 'paymentsScreen', 'cityScreen', 'chatScreen', 'vitrinaScreen'].forEach(id => {
+            ['mainScreen', 'balanceScreen', 'transferScreen', 'paymentsScreen', 'cityScreen', 'chatScreen', 'vitrinaScreen', 'operationsScreen'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
         }
         function switchTab(name) {
             hideAllScreens();
             document.getElementById(name + 'Screen').classList.remove('hidden');
+        }
+        function openBalanceScreen() {
+            hideAllScreens();
+            document.getElementById('balanceScreen').classList.remove('hidden');
+        }
+        function openTransferScreen() {
+            hideAllScreens();
+            document.getElementById('transferScreen').classList.remove('hidden');
+        }
+        function openOperationsScreen() {
+            hideAllScreens();
+            document.getElementById('operationsScreen').classList.remove('hidden');
+        }
+        function executeTransfer() {
+            const acc = document.getElementById('accountInput').value;
+            const sum = document.getElementById('amountInput').value;
+            if(!acc || !sum) {
+                showToast('⚠️ Заполните счет и сумму');
+                return;
+            }
+            showToast('✅ Перевод на сумму ' + sum + ' ₽ успешно выполнен!');
+            setTimeout(() => {
+                switchTab('main');
+                document.getElementById('accountInput').value = '';
+                document.getElementById('amountInput').value = '';
+            }, 1500);
         }
         function showToast(text) {
             const t = document.getElementById('toast');
